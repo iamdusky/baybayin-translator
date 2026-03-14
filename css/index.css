@@ -1,0 +1,475 @@
+/*
+Baybayin Translator — Baker School Multicultural Night
+Golden Manuscript Illumination Theme
+*/
+
+/* 01 Design Tokens */
+:root {
+  --midnight: #080c1a;
+  --indigo-deep: #0f1535;
+  --indigo: #1a1f4a;
+  --gold-bright: #ffd666;
+  --gold: #e8b630;
+  --gold-dim: #b8922a;
+  --amber: #f0a030;
+  --terracotta: #d4654a;
+  --terracotta-glow: rgba(212, 101, 74, 0.4);
+  --cream: #f5ead0;
+  --text-light: #d8d4e8;
+  --text-muted: #7a7698;
+  --surface: rgba(255, 255, 255, 0.04);
+  --surface-border: rgba(232, 182, 48, 0.12);
+  --surface-glow: rgba(232, 182, 48, 0.06);
+  --max-width: 1100px;
+  --font-size-output: clamp(80px, 14vw, 180px);
+  --font-size-input: clamp(20px, 3vw, 28px);
+  --radius-pill: 50px;
+  --radius-box: 24px;
+}
+
+/* 02 Fonts */
+@font-face {
+  font-family: "Ubuntu Bold";
+  src: url(../assets/fonts/Ubuntu/Ubuntu-Bold.ttf);
+}
+@font-face {
+  font-family: "Ubuntu Medium";
+  src: url(../assets/fonts/Ubuntu/Ubuntu-Medium.ttf);
+}
+@font-face {
+  font-family: "Ubuntu Regular";
+  src: url(../assets/fonts/Ubuntu/Ubuntu-Regular.ttf);
+}
+@font-face {
+  font-family: Baybayin;
+  src: url(../assets/fonts/Baybayin/NotoSansTagalog.otf);
+}
+
+/* 03 Base & Layout */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: "Ubuntu Regular", system-ui, sans-serif;
+  color: var(--text-light);
+  background: var(--midnight);
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(30, 30, 90, 0.7) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(50, 30, 10, 0.4) 0%, transparent 60%),
+    linear-gradient(175deg, #080c1a 0%, #111540 40%, #0e1030 70%, #0a0c1a 100%);
+  overflow-x: hidden;
+  padding: 0 24px;
+}
+
+/* Subtle grain overlay */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-width);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 20px 0;
+}
+
+/* 04 Header */
+.header {
+  text-align: center;
+  margin-bottom: 36px;
+  animation: headerReveal 0.8s ease-out both;
+}
+
+.header .event-label {
+  display: inline-block;
+  font-family: "Ubuntu Bold", system-ui, sans-serif;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  color: var(--terracotta);
+  background: rgba(212, 101, 74, 0.1);
+  border: 1px solid rgba(212, 101, 74, 0.25);
+  padding: 6px 20px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 16px;
+}
+
+.header h1 {
+  font-family: "Ubuntu Bold", system-ui, sans-serif;
+  font-size: clamp(26px, 5vw, 44px);
+  color: #ffffff;
+  margin-bottom: 10px;
+  line-height: 1.15;
+}
+
+.header h1 .accent {
+  color: var(--gold);
+}
+
+.header .subtitle {
+  font-family: "Ubuntu Regular", system-ui, sans-serif;
+  font-size: clamp(14px, 2.5vw, 17px);
+  color: var(--text-muted);
+  max-width: 500px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+/* 05 Output Display */
+.output-section {
+  width: 100%;
+  margin-bottom: 20px;
+  animation: cardReveal 0.9s ease-out 0.15s both;
+}
+
+.output-card {
+  position: relative;
+  padding: 3px;
+  border-radius: calc(var(--radius-box) + 3px);
+  background: linear-gradient(
+    135deg,
+    rgba(232, 182, 48, 0.3) 0%,
+    rgba(232, 182, 48, 0.05) 30%,
+    rgba(232, 182, 48, 0.05) 70%,
+    rgba(232, 182, 48, 0.2) 100%
+  );
+}
+
+/* Corner ornaments */
+.output-card::before,
+.output-card::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: var(--gold-dim);
+  border-style: solid;
+  opacity: 0.4;
+  z-index: 2;
+  pointer-events: none;
+}
+.output-card::before {
+  top: 10px;
+  left: 10px;
+  border-width: 2px 0 0 2px;
+  border-radius: 6px 0 0 0;
+}
+.output-card::after {
+  bottom: 10px;
+  right: 10px;
+  border-width: 0 2px 2px 0;
+  border-radius: 0 0 6px 0;
+}
+
+/* Additional corners via the inner div pseudo-elements */
+.output-card-inner {
+  position: relative;
+}
+.output-card-inner::before,
+.output-card-inner::after {
+  content: "";
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-color: var(--gold-dim);
+  border-style: solid;
+  opacity: 0.4;
+  z-index: 2;
+  pointer-events: none;
+}
+.output-card-inner::before {
+  top: 7px; /* 10px - 3px padding of parent */
+  right: 7px;
+  border-width: 2px 2px 0 0;
+  border-radius: 0 6px 0 0;
+}
+.output-card-inner::after {
+  bottom: 7px;
+  left: 7px;
+  border-width: 0 0 2px 2px;
+  border-radius: 0 0 0 6px;
+}
+
+#outputDisplay {
+  width: 100%;
+  min-height: 280px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: Baybayin, sans-serif;
+  font-size: var(--font-size-output);
+  color: var(--gold-bright);
+  text-shadow:
+    0 0 10px rgba(255, 214, 102, 0.6),
+    0 0 30px rgba(232, 182, 48, 0.35),
+    0 0 60px rgba(232, 182, 48, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.4);
+  text-align: center;
+  padding: 48px 40px;
+  background:
+    radial-gradient(ellipse at 50% 50%, var(--surface-glow) 0%, transparent 70%),
+    var(--indigo-deep);
+  border-radius: var(--radius-box);
+  word-break: break-word;
+  overflow: hidden;
+  line-height: 1.3;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+
+#outputDisplay.placeholder {
+  color: var(--text-muted);
+  font-family: "Ubuntu Regular", system-ui, sans-serif;
+  font-size: clamp(18px, 3vw, 22px);
+  text-shadow: none;
+  letter-spacing: 0.5px;
+}
+
+/* 06 Input Section */
+.input-section {
+  width: 100%;
+  max-width: 640px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-bottom: 16px;
+  animation: inputReveal 0.8s ease-out 0.4s both;
+}
+
+#tagalogTextArea {
+  flex: 1;
+  font-family: "Ubuntu Medium", system-ui, sans-serif;
+  font-size: var(--font-size-input);
+  padding: 16px 28px;
+  border: 2px solid var(--surface-border);
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+
+#tagalogTextArea::placeholder {
+  color: var(--text-muted);
+  font-family: "Ubuntu Regular", system-ui, sans-serif;
+}
+
+#tagalogTextArea:focus {
+  border-color: var(--amber);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow:
+    0 0 0 4px rgba(240, 160, 48, 0.15),
+    0 0 20px rgba(240, 160, 48, 0.08);
+}
+
+/* 07 Buttons */
+.btn {
+  font-family: "Ubuntu Bold", system-ui, sans-serif;
+  font-size: 15px;
+  letter-spacing: 0.5px;
+  border: none;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  user-select: none;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+#clearButton {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  padding: 16px 24px;
+  flex-shrink: 0;
+}
+
+#clearButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-light);
+}
+
+.copy-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 32px;
+  animation: inputReveal 0.8s ease-out 0.3s both;
+}
+
+#copyButton {
+  background: linear-gradient(135deg, var(--terracotta) 0%, #c0503a 100%);
+  color: #ffffff;
+  padding: 14px 32px;
+  box-shadow: 0 4px 16px rgba(212, 101, 74, 0.3);
+}
+
+#copyButton:hover {
+  background: linear-gradient(135deg, #e06e55 0%, var(--terracotta) 100%);
+  box-shadow: 0 6px 24px rgba(212, 101, 74, 0.4);
+}
+
+/* 08 Toast */
+#toast {
+  visibility: hidden;
+  position: fixed;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--gold);
+  color: var(--midnight);
+  font-family: "Ubuntu Bold", system-ui, sans-serif;
+  font-size: 14px;
+  padding: 12px 28px;
+  border-radius: var(--radius-pill);
+  box-shadow: 0 8px 30px rgba(232, 182, 48, 0.3);
+  z-index: 10;
+}
+
+#toast.show {
+  visibility: visible;
+  animation: toastIn 0.3s ease-out, toastOut 0.3s ease-in 2s;
+}
+
+/* 09 Animations */
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(-50%) translateY(12px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to   { opacity: 0; transform: translateX(-50%) translateY(12px); }
+}
+
+@keyframes textFadeIn {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.fade-in {
+  animation: textFadeIn 0.35s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+@keyframes headerReveal {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes inputReveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Ambient glow behind the output card */
+.output-section::before {
+  content: "";
+  position: absolute;
+  width: 70%;
+  height: 200px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(ellipse, rgba(232, 182, 48, 0.06) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.output-section {
+  position: relative;
+}
+
+/* 10 Footer */
+.footer {
+  text-align: center;
+  padding: 16px 0 8px;
+}
+
+.footer p {
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.7;
+  opacity: 0.7;
+}
+
+.footer a {
+  color: var(--text-muted);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer a:hover {
+  color: var(--text-light);
+}
+
+/* 11 Responsive */
+@media screen and (max-width: 600px) {
+  body { padding: 0 16px; }
+
+  .container { padding: 20px 0 16px; }
+
+  .header { margin-bottom: 24px; }
+
+  .header .event-label {
+    font-size: 10px;
+    letter-spacing: 3px;
+    padding: 5px 16px;
+  }
+
+  #outputDisplay {
+    min-height: 180px;
+    padding: 32px 20px;
+  }
+
+  .output-card::before,
+  .output-card::after,
+  .output-card-inner::before,
+  .output-card-inner::after {
+    width: 28px;
+    height: 28px;
+  }
+
+  .input-section {
+    flex-direction: column;
+    max-width: 100%;
+  }
+
+  #clearButton { width: 100%; }
+
+  #toast {
+    left: 16px;
+    right: 16px;
+    transform: none;
+    text-align: center;
+  }
+
+  @keyframes toastIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes toastOut {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(12px); }
+  }
+}
