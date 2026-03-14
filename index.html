@@ -21,6 +21,11 @@
     <link rel="manifest" href="site.webmanifest" />
     <link rel="stylesheet" href="css/index.css" />
     <script src="js/index.js"></script>
+    <script>
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => navigator.serviceWorker.register('/baybayin/sw.js'));
+      }
+    </script>
   </head>
   <body>
     <div id="toast">Text copied</div>
