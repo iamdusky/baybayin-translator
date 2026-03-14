@@ -1,6 +1,6 @@
 # Baybayin Name Translator
 
-An interactive web app that translates names into **Baybayin**, the pre-colonial writing system of the Philippines. Built for the **Baker School Multicultural Night** — kids type their name, see it rendered in Baybayin script, then practice writing it on paper.
+An interactive web app that translates names into **Baybayin**, the pre-colonial writing system of the Philippines. Built for the **An Elemetary School Multicultural Night** — kids type their name, see it rendered in Baybayin script, then practice writing it on paper.
 
 ## Features
 
