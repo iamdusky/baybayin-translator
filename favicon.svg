@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0f1535"/>
+      <stop offset="100%" stop-color="#080c1a"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8b630" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#e8b630" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- Background rounded square -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+  <rect width="512" height="512" rx="96" fill="url(#glow)"/>
+
+  <!-- 8-rayed Filipino sun, centered at 256,256 -->
+  <g fill="#ffd666" transform="translate(256,256)">
+    <!-- Center circle -->
+    <circle r="68"/>
+
+    <!-- 8 rays: 4 cardinal (longer) + 4 diagonal (shorter) -->
+    <!-- Each ray is a slim diamond/rhombus shape -->
+
+    <!-- Up -->
+    <polygon points="0,-80 10,-130 0,-195 -10,-130"/>
+    <!-- Down -->
+    <polygon points="0,80 10,130 0,195 -10,130"/>
+    <!-- Left -->
+    <polygon points="-80,0 -130,10 -195,0 -130,-10"/>
+    <!-- Right -->
+    <polygon points="80,0 130,10 195,0 130,-10"/>
+
+    <!-- Upper-right diagonal -->
+    <polygon points="57,-57 90,-108 138,-138 108,-90" transform="rotate(0)"/>
+    <!-- Upper-left diagonal -->
+    <polygon points="-57,-57 -108,-90 -138,-138 -90,-108"/>
+    <!-- Lower-right diagonal -->
+    <polygon points="57,57 108,90 138,138 90,108"/>
+    <!-- Lower-left diagonal -->
+    <polygon points="-57,57 -90,108 -138,138 -108,90"/>
+  </g>
+</svg>
